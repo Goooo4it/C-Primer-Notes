@@ -1,0 +1,11 @@
+C++ provide the following types of conversions for class:
+
+1. A class constructor that has but a single argument serves as an instruction for converting a value of the argument
+type to the class type. However, using `explicit` in the constructor declaration eliminates implicit conversions and
+allows only explicit conversions.
+
+2. A special class member operator function called a `conversion function` serves as an instruction for converting 
+a class object to some other type. THe conversion function is a class member, has no declared return type, has no 
+argument, and is called `operator TypeName()`, where `TypeName` is the type to which the object is to be converted.
+This conversion function is invoked automatically when you assign a class object to a variable of that type or use 
+the type cast operator to that type.
