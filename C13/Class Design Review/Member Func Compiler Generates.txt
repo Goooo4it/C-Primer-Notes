@@ -1,0 +1,35 @@
+# Defualt constructor
+
+A defualt constructor is one that has no argument, or else one for which all the arguments have default arguments.
+If you don't define any constructor, the compiler defines a default constructor for you.
+
+If you define a constructor of any kind, the compiler does not define a default constructor for you. In that case, it's up to you to provide a default constructor if one is needed.
+
+# Copy constructor
+
+A copy constructor is a constructor that takes an object of the class type as its argument. Typically, the declared parameter is a constant reference to the class type. The copy constructor has the prototype:
+
+`ClassName(const ClassName &)`
+
+A class copy constructor is used in the following situation
+1. When a new object is initialized to an object of the same class
+2. When an object is passed to a function by value
+3. When a function returns an object by value
+4. When the compiler generates a temporary object
+
+If the program does not have a copy constructor, the compiler defines a copy constructor that performs memberwise initialization. In some case, memberwise initialization is not desirable. For example, when member pointers initialized with `new` generally require that you institute deep copying. Or a class may have a static variable that needs to be modified.
+
+# Assigment operators 
+
+Difference between assignment and initialization: If a statement creates a new object, it's using initialization, and if a statement alters the value of an existing object, it's assignment.
+
+Defualt assignment uses memberwise assignment. If you need to define copy constructor explicit, you also need to define the assignment operator explicitly. The protype for a class `ClassName` assignment is
+
+`ClassName & ClassName::operator=(const ClassName &);`
+
+The compiler does not generate assignment operators for assigning one type to another. Suppose you want to be able to assign a string to a `Star` object. One opproach is to define such an operator explicitly
+
+`Star & Star::operator=(const char *);`
+
+Another approach is to use a conversion function to convert a string to a `Star` object and then use the `Star-to-Star` assignment. 
+

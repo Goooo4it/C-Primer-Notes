@@ -1,0 +1,40 @@
+# Is-a Relationship
+
+You should be guided by the `is-a` relationship. A base class pointer can point to a derived-class object, a bass class reference can refer to a derived-class object. 
+
+# What's not inherited
+
+Constructors are not inherited, creating a derived object requires calling a derived-class constructor. 
+
+Destructors are not inherited either. When an object is destroyed, the program first calls the derived destructor then the base destructor. Generally, if a class serves as a base class, the destructor should be virtual.
+
+Assignment operators are not inherited. 
+
+# Assignment operator
+
+If the compiler detects that a program assigns one object to another of the same class, it automatically supplies that class with an assignment operator. The default version of this assignment operator uses memberwise asssignment.
+
+We need to provide an explicit assignment operator if class constructors use `new` to initize pointers. Because C++ uses the base-class assignment operator for the base part of derived objects, you don't need to redefine the assignment operator for a derived class unless it adds data members that require special care. 
+
+# virtual method
+
+If you want a derived class to be able to redefine a method, you define the method as virtual in the base class. This enable late, or dynamic binding. 
+
+A base class destructor should be virtual.
+
+# Friend 
+
+Because a friend function is not actually a class member, it's not inherited. However, you may still want a friend to a derived class to use a friend to the base class. THe way to accomplish this is to type cast a derived-class reference or pointer to the base-class equivalent and to then use the type cast reference or pointer to invoke the base-class friend.
+
+
+`ostream & operator<<(ostream & os, cosnt hasDMA & hs)
+{
+    //type cast to math operator<<(ostream & os, const baseDMA &)
+    os << (const baseDMA &) hs;
+    os << "Style: " << hs.style << endl;
+    return os;
+}`
+
+Or use dynamic cast operator `dynamic_cast<>`:
+
+`os << dynamic_cast<const baseDMA &> (hs)`

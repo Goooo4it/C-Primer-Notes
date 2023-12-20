@@ -1,0 +1,43 @@
+# Constructor
+
+Constructors are not inherited.
+
+# Destructor
+
+**An explicit destructor is needed to delete all memory allocated by `new` in the class constructors and takes care of any other special bookkeeping that destroying a class object requires.** If a class is used to as a base class, you should provide a virtual destructor even if the class doesn't require a destructor.
+
+# Conversion
+
+**Any constructor that can be invoked with exactly one artgument defines conversion from the argument type to the class type.**
+
+Using `Explicit` keyword in the protype for a one-argument constructor disable implicit conversions but still allow explic conversions.
+
+To convert from a class object to some other type, you define a conversion function. A conversion function is a class member function with no argument or declared return type that has the name of the type to be converted to. 
+
+`Star::Star double() {...}` // converts star to double
+`Star::Star const char *() {...}` // converts star to const char
+
+# Passing an object by value versus passing a reference
+
+In general, **if a function uses an object argument, you should pass by reference rather than by value for efficiency**. Passing by value involves creating a temporary copy, which means calling copy constructor and later calling destructor. If the function does not modify the object, you should declare the object as a `const` reference.
+
+Another reason to use passing by reference is that in the case of inheritance using virtual functions, a function defined as accepting a base-class reference argument can also be used successfully with derived class.
+
+
+# Returning an object versus returning a reference
+
+The reason of returning a reference rather than an object is that returning an object involving generating a temporary copy of the returned object, which invokes a constructor and a destructor. 
+
+However, it is not always possible to return a reference. A function should not return a reference to a temporary object created in the function because the reference becomes invalid when the function terminates and the object disappears. **If a function returns temporary object created in the function, you should not use a reference.**
+
+
+# Using `const`
+
+Use it to guarantee that a method does not modify an argument:
+
+`Star::Star(const char * s) {...}` //won't change the string which s points to
+
+`void Star::show() const {...}` //won't change invoking object
+Here `const` means `const Star * this`, where `this` points to the invoking object.
+
+Note that if a function declares an argument as a reference or pointer to a `const`, it cannot pass along that argument to another function unless that function also guarantees not to change the argument.
