@@ -1,0 +1,26 @@
+1. If use `new` to initialize a pointer member in a constructor, should use delete in the destructor
+2. The uses of `new` and `delete` should be compatible. Should pair `new` with `delete` and `new []` with `delete []`.
+3. If there are multiple constructors, should use `new` the same way - either all with brackets or all without brackets.
+4. SHould define a copy constructor that initializes one obejct to another by doing deep copying.
+```
+String::String(const String & st) {
+    num_strings++;
+    len = st.len;
+    str = new char[len + 1];
+    std::strcpy(str, st.str);
+}
+```
+5. Should define an assignment operator that copies one object to another by doing deep copying. 
+```
+String & String::operator=(const String & st) {
+    if (this == &st) {
+        return *this;
+    }
+    delete []
+     str;
+    len = st.len;
+    str = new char[len + 1];
+    std::strcpy(str, st.str);
+    return *this;
+}
+```
