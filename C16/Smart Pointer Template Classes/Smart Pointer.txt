@@ -1,0 +1,36 @@
+A `smart pointer` is a class object tht acts like a pointer, but has additional features. 
+There are three types of smart pointers (`auto_ptr, unique_ptr, shared_ptr`), each defines 
+a pointer-like object intended to be assigned an address obtained by `new`. When the smart 
+pointer expires, its destructor uses `delete` to free the memory. 
+
+Each of the three classes has an `explicit` constructor taking a pointer as an argument. 
+Thus, there is no automatic type cast from a pointer to a smart pointer pbject. But explicit 
+type conversion is allowed, you can convert a pointer to a smart point explicit and assigned
+it to a smart pointer:
+```
+shared_ptr<double> pd;
+double * p_reg = new double;
+pd = p_reg // not allowed, implicit conversion
+pd = shared_ptr<double> (p_reg) // allowed, explicit conversion
+```
+
+
+Why smart pointers?
+```
+auto_ptr<string> ps (new string("I resigned lonely as a cloud."));
+auto_ptr<string> vocation;
+vocation = ps;
+```
+If both `ps` and `vocation` are ordinary pointers, the two pointers point to the same `string` object.
+If the two pointers expire, the program tends to delete the same object twice - once when `ps` expires,
+once when `vocation` expires.
+
+Solutions:
+1. Define the assignment operator so that it makes a deep copy.
+2. Institute the concept of `ownership`, with only one smart pointer allowed to own a particular object.
+Only if the smart pointer owns the object with its destructor delete the object. Then have assignment
+transfer ownership. This is the `auto_ptr` and `unique_ptr` strategy.
+3. Create an even smarter pointer that keeps track of how many smart pointer refer to a particular 
+object. This is called `reference counting`. Assignment, would increase the count by one, and the 
+expiration of a pointer would decrease the count by one. Only when the final pointer expires would 
+`delete` be invoked. This is the `shared_ptr` strategy.

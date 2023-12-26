@@ -1,0 +1,46 @@
+Consider the following
+```
+auto_ptr<string> p1(new string("sito)); //#1
+auto_ptr<string> p2; //#2
+p2 = p1; //#3
+```
+When, in statement #3, p2 takes the ownership of the string object. p1 is stripped of ownership. 
+This is good because it prevents the destructor from both p1 and p2 from trying to delete the 
+same object. But it also is bad if the program subsequently tries to use p1 because p1 is no longer 
+points to valid data.
+
+Now consider ghd `unique_ptr` equivalent:
+```
+unique_ptr<string> p3(new string("sito)); //#4
+unique_ptr<string> p4; //#5
+p4 = p3; //#6
+```
+The compiler does not allow statement #6, so we avoid the problem that p3 not pointing to valid data.
+However, if a program attempts to assign one `unique_ptr` to another, the compiler allows it if the
+source object is a temporary rvalue and disallows it if the source object some some duration:
+```
+using namespace std;
+unique_ptr<string> pu1(new string "Hello");
+unique_ptr<string> pu2;
+pu2 = pu1; // now allowed
+unique_ptr<string> pu3;
+pu3 = unique_ptr<string>(new string "Yo"); // allowed
+```
+
+C++ has a standard library function std::move() function that lets you assign one `unique_ptr`
+to another. Let's assume the function `demo()` returns a `unique_ptr<string>` object:
+```
+using namespace std;
+unique_ptr<string> ps1, ps2;
+ps1 = demo("Uniquely Special");
+ps2 = move(ps1);  // enable assignment
+ps1 = demo(" and more");
+cout << *ps2 << *ps1 << endl;
+```
+
+Note that we must pair `delete` with `new`, and `delete []` with `new []`. The `auto_ptr` template
+uses `delete` not `delete []`. But `unique_ptr` has a `new []`, `delete []` version:
+```
+std::unique_ptr<double []> pda(new double(5));
+```
+
